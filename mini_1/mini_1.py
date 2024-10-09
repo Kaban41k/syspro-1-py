@@ -1,7 +1,7 @@
 def solve(x):
-    sign = x < 0
+    sign = int(x < 0)
     k = sign
-    if sign:
+    if sign == 1:
         x = -x - 1
     while x != 0:
         k += (x + sign) % 2
