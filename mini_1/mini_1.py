@@ -6,9 +6,23 @@ def solve(x):
     while x != 0:
         k += (x + sign) % 2
         x //= 2
-    print(k)
+
+    return k
 
 
-x = int(input())
+tests = {10: 2,
+         -123: 3,
+         -7: 2,
+         1024: 1,
+         123456789: 16,
+         -1000: 3}
 
-solve(x)
+for i in tests.keys():
+    print(f"Test {i}: ", end="")
+    if solve(i) == tests[i]:
+        print("PASSED")
+    else:
+        print("!!!FAIL!!!")
+        break
+else:
+    print("\nALL TESTS PASSED :D")
