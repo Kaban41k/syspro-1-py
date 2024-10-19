@@ -1,5 +1,5 @@
 def solve(s):
-    return [list(map(float, x.split())) for x in list(s.split("|"))]
+    return [list(map(float, x.split())) for x in s.split("|")]
 
 
 assert solve("1 2 | 3 4") == [[1.0, 2.0], [3.0, 4.0]], "Wrong answer"
