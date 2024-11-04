@@ -1,20 +1,23 @@
-from functools import partial
+from functools import *
 
 
 def deprecated(f=None, *, since=None, will_be_removed=None):
     if f is None:
-        return partial(deprecated, since=None, will_be_removed=None)
+        return partial(deprecated, since=since, will_be_removed=will_be_removed)
 
-    if since is None:
-        print(f"Warning: function {f.__name__} is deprecated.", end="")
-    else:
-        print(f"Warning: function {f.__name__} is deprecated since version{since}.")
+    print(f"Warning: function {f.__name__} is deprecated", end="")
+
+    if since is not None:
+        print(f" since version{since}", end="")
+
+    print(". It will be removed in ", end="")
 
     if will_be_removed is None:
-        print(f" It will be removed in future versions.")
+        print(f"future versions.")
     else:
-        print(f" It will be removed in version {will_be_removed}")
+        print(f"version {will_be_removed}.")
 
+    @wraps(f)
     def inner(*args, **kwargs):
         ret = f(*args, **kwargs)
         return ret
