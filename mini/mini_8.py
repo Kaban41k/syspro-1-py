@@ -7,7 +7,7 @@ def format_table(benchmarks, algos, results):
     for i in range(len(algos)):
         column_lens.append(len(algos[i]))
         for j in range(len(results)):
-            column_lens[i] = max(column_lens[i], results[j][i])
+            column_lens[i+1] = max(column_lens[i+1], len(str(results[j][i])))
 
     print("| Benchmark " + " " * (column_lens[0] - 11), end="")
     for i in range(len(algos)):
@@ -25,4 +25,4 @@ def format_table(benchmarks, algos, results):
 
 format_table(["best case", "worst case"],
              ["quick sort", "merge sort", "bubble sort"],
-             [[1.23, 1.56, 2.0], [3.3, 2.9, 3.9]])
+             [[1.23, 1.56, 2.0], [10**10, 2.9, 3.9]])
