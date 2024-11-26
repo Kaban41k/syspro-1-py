@@ -1,15 +1,10 @@
 def flatten(a, depth = -1):
     b = []
     for i in a:
-        if not isinstance(i, list):
+        if not isinstance(i, list) or depth == 0:
             b.append(i)
         else:
-            if depth != 0:
-                for j in flatten(i, depth=depth-1 if depth > 0 else -1):
-                    b.append(j)
-            else:
-                b.append(i)
-
+            b.extend(flatten(i, depth=depth-1 if depth > 0 else -1))
     return b
 
 
