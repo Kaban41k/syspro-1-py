@@ -1,7 +1,7 @@
 def solve(d):
     new_d = dict()
     a = list(d.keys())
-    b = [d[x] for x in a]
+    b = list(d.values())
 
     for i in range(len(a)):
         if b[i] in new_d.keys():

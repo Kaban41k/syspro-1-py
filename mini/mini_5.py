@@ -17,5 +17,10 @@ assert just_two() == 2, "Wrong answer"
 assert specialize(str, 123)() == "123", "Wrong answer"
 assert list(specialize(map, int)(["1", "2"])) == [1, 2], "Wrong answer"
 
+try:
+    assert specialize(my_sum, z=12)()
+    exit(1)
+except:
+    pass
 
 print("ALL TESTS PASSED :D")
