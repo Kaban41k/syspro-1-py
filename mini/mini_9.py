@@ -1,11 +1,11 @@
 class LRUCache:
-    def __init__(self, capasity=3):
-        self.capasity = capasity
+    def __init__(self, capaсity=3):
+        self.capaсity = capaсity
         self.cache = {}
         self.keys = []
 
     def put(self, key, value):
-        if len(self.keys) == self.capasity:
+        if len(self.keys) == self.capaсity:
             self.cache.pop(self.keys[-1])
             self.keys[-1] = key
         else:
@@ -17,12 +17,8 @@ class LRUCache:
         if key not in self.keys:
             return None
 
-        keys = [key]
-        for i in range(len(self.keys)):
-            if self.keys[i] != key:
-                keys.append(self.keys[i])
-
-        self.keys = keys
+        self.keys.remove(key)
+        self.keys.insert(0, key)
 
         return self.cache[key]
 
