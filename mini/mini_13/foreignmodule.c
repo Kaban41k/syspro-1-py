@@ -27,12 +27,10 @@ static PyObject* foreign_matrix_power(PyObject* self, PyObject* args) {
     return NULL;
 
   n = PyObject_Length(matrix);
-
-
+  
   double* a = nc_malloc(n * n * sizeof(double));
   double* b = nc_malloc(n * n * sizeof(double));
   double* buf = nc_malloc(n * n * sizeof(double));
-
 
   for (size_t i = 0; i < n; i++) {
     PyObject* list = PyList_GetItem(matrix, i);
