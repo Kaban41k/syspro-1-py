@@ -1,0 +1,6 @@
+Metadata-Version: 2.1
+Name: foreign
+Version: 1.0.0
+Summary: Python interface for product of matrices in C
+Author: kbn
+Author-email: pig.anishenko@gmail.com
