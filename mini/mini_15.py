@@ -1,5 +1,3 @@
-import numpy as np
-from numpy.linalg import matrix_power
 from threading import Thread
 from threading import Lock
 import datetime
@@ -7,15 +5,33 @@ import datetime
 queue = []
 the_end = False
 
-CON_N = 100
-TASKS_N = 200000
+CON_N = 1000
+TASKS_N = 40000
+
+
+def matrix_power(a, iterations):
+    length = len(a[0])
+    b = a
+    c = [[0 for i in range(length)] for j in range(length)]
+
+    for iteration in range(iterations):
+        for i in range(length):
+            for j in range(length):
+                for l in range(length):
+                    c[i][j] += a[i][l] * b[l][j]
+
+        for i in range(length):
+            for j in range(length):
+                a[i][j] = c[i][j]
+
+        c = [[0 for i in range(length)] for j in range(length)]
 
 
 def producer():
     lock = Lock()
     size = 10
     value = 10
-    times = 10
+    times = 3
 
     for i in range(TASKS_N):
         lock.acquire()
@@ -40,22 +56,21 @@ def consumer():
         queue.pop(-1)
         lock.release()
 
-        a = np.zeros((size, size))
+        a = [[0 for i in range(size)] for j in range(size)]
 
         for i in range(size):
             for j in range(size):
-                a[i, j] = value ^ (i + j)
+                a[i][j] = value ^ (i + j)
 
         matrix_power(a, times)
-        result = np.sum(a)
 
-
-start = datetime.datetime.now()
 
 pro_t = Thread(target=producer(), args=[])
 pro_t.start()
 
 con_ts = []
+
+start = datetime.datetime.now()
 
 for i in range(CON_N):
     con_ts.append(Thread(target=consumer(), args=[]))
