@@ -29,8 +29,7 @@ class Node:
 a = Node(1)
 b = Node(2)
 
-print(a)
-print(b)
+assert a.x == b.x, "Wrong answer"
 assert a is b, "Wrong answer"
 
 print("ALL TESTS PASSED :D")
