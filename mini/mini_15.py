@@ -4,9 +4,9 @@ import datetime
 
 queue = []
 the_end = False
+lock = Lock()
 
-CON_N = 1000
-TASKS_N = 40000
+TASKS_N = 100000
 
 
 def matrix_power(a, iterations):
@@ -28,8 +28,7 @@ def matrix_power(a, iterations):
 
 
 def producer():
-    lock = Lock()
-    size = 10
+    size = 4
     value = 10
     times = 3
 
@@ -43,16 +42,17 @@ def producer():
 
 
 def consumer():
-    lock = Lock()
+    global queue
 
     while len(queue) != 0 or not the_end:
+        lock.acquire()
         if len(queue) == 0:
+            lock.release()
             continue
 
-        lock.acquire()
-        size = queue[-1][0]
-        value = queue[-1][1]
-        times = queue[-1][2]
+        size = queue[len(queue) - 1][0]
+        value = queue[len(queue) - 1][1]
+        times = queue[len(queue) - 1][2]
         queue.pop(-1)
         lock.release()
 
@@ -65,22 +65,23 @@ def consumer():
         matrix_power(a, times)
 
 
-pro_t = Thread(target=producer(), args=[])
-pro_t.start()
+for CON_N in range(1, 30):
+    pro_t = Thread(target=producer, args=[])
+    pro_t.start()
 
-con_ts = []
+    con_ts = []
 
-start = datetime.datetime.now()
+    start = datetime.datetime.now()
 
-for i in range(CON_N):
-    con_ts.append(Thread(target=consumer(), args=[]))
-    con_ts[i].start()
+    for i in range(CON_N):
+        con_ts.append(Thread(target=consumer, args=()))
+        con_ts[i].start()
 
-pro_t.join()
+    pro_t.join()
 
-for i in range(CON_N):
-    con_ts[i].join()
+    for i in range(CON_N):
+        con_ts[i].join()
 
-finish = datetime.datetime.now()
+    finish = datetime.datetime.now()
 
-print(finish - start)
+    print(CON_N, " " * (3 - len(str(CON_N))) + "Time:", str(finish - start)[(str(finish - start).rfind(":") + 1):])
