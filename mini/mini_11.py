@@ -2,14 +2,12 @@ def cycle(iterable):
     elements = [element for element in iterable]
 
     while True:
-        for element in elements:
-            yield element
+        yield from elements
 
 
 def chain(*iterables):
     for iterable in iterables:
-        for element in iterable:
-            yield element
+        yield from iterable
 
 
 def take(seq, n):
