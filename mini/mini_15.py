@@ -66,6 +66,9 @@ def consumer():
 
 
 for CON_N in range(1, 30):
+    queue = []
+    the_end = False
+    
     pro_t = Thread(target=producer, args=[])
     pro_t.start()
 
