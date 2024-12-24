@@ -46,7 +46,6 @@ def consumer():
     while len(queue) != 0 or not the_end:
         with lock:
             if len(queue) == 0:
-                lock.release()
                 continue
 
             size, value, times = queue.pop(-1)
