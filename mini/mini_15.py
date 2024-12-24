@@ -33,9 +33,8 @@ def producer():
     times = 3
 
     for i in range(TASKS_N):
-        lock.acquire()
-        queue.append((size, value, times))
-        lock.release()
+        with lock:
+            queue.append((size, value, times))
 
     global the_end
     the_end = True
@@ -45,16 +44,12 @@ def consumer():
     global queue
 
     while len(queue) != 0 or not the_end:
-        lock.acquire()
-        if len(queue) == 0:
-            lock.release()
-            continue
+        with lock:
+            if len(queue) == 0:
+                lock.release()
+                continue
 
-        size = queue[len(queue) - 1][0]
-        value = queue[len(queue) - 1][1]
-        times = queue[len(queue) - 1][2]
-        queue.pop(-1)
-        lock.release()
+            size, value, times = queue.pop(-1)
 
         a = [[0 for i in range(size)] for j in range(size)]
 
@@ -68,7 +63,7 @@ def consumer():
 for CON_N in range(1, 30):
     queue = []
     the_end = False
-    
+
     pro_t = Thread(target=producer, args=[])
     pro_t.start()
 
