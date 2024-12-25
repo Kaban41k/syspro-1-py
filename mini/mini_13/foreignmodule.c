@@ -12,28 +12,27 @@ void* nc_malloc(size_t size) {
   return result;
 }
 
-static void ptr_swap(double** a, double** b) {
-    double* c = *b;
-    *b = *a;
-    *a = c;
-}
-
 static PyObject* foreign_matrix_power(PyObject* self, PyObject* args) {
   PyObject* matrix;
   size_t degree;
   size_t n;
 
-  if (!PyArg_ParseTuple(args, "OK", &matrix, &degree))
+  PyList_SetItem(matrix, 2, PyLong_FromLong(2));
+
+  if (!PyArg_ParseTuple(args, "O", &matrix, &degree))
     return NULL;
 
+  return matrix;
+
   n = PyObject_Length(matrix);
-  
+
   double* a = nc_malloc(n * n * sizeof(double));
   double* b = nc_malloc(n * n * sizeof(double));
   double* buf = nc_malloc(n * n * sizeof(double));
 
   for (size_t i = 0; i < n; i++) {
     PyObject* list = PyList_GetItem(matrix, i);
+
     for (size_t j = 0; j < n; j++) {
       PyObject* item = PyList_GetItem(list, j);
       a[i * n + j] = PyFloat_AsDouble(item);
@@ -56,18 +55,23 @@ static PyObject* foreign_matrix_power(PyObject* self, PyObject* args) {
       }
     }
 
-    ptr_swap(&a, &buf);
+    double* c = buf;
+    buf = a;
+    a = c;
   }
 
   PyObject* result = PyList_New(n);
 
   for (size_t i = 0; i < n; i++) {
     PyObject* list = PyList_New(n);
-    PyList_SetItem(result, i, list);
+
     for (size_t j = 0; j < n; j++) {
       double item = a[i * n + j];
+
       PyList_SetItem(list, j, PyFloat_FromDouble(item));
     }
+
+    PyList_SetItem(result, i, list);
   }
 
   free(a);
